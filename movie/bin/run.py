@@ -3,4 +3,8 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.getcwd()))
 
-from core import schedule
+from core.schedule import Schedule
+
+if __name__ == '__main__':
+    s = Schedule()
+    s.run()

@@ -40,6 +40,4 @@ class Schedule:
         comment_process = Schedule.parse_comment()
 
 
-if __name__ == '__main__':
-    s = Schedule()
-    s.run()
+
