@@ -38,3 +38,8 @@ print(list(db['inventory'].find({'status': 'A'}, {'item': 1, 'status': 1, "insto
 # The following example uses the $slice projection operator to return the last element in the instock array
 print(list(db['inventory'].find({'status': 'A'}, {'item': 1, 'status': 1, "instock": {'$slice': 1}})))
 
+
+# print(list(db['inventory'].find({'status': 'A'}, {'item': 1, 'status': 1, "instock": {'$slice': [1, -1]}})))
+print(list(db['inventory'].find({'status': 'A'}, {'item': 1, 'status': 1, "instock": 1})))
+
+client.close()
