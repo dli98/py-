@@ -7,6 +7,8 @@ db = client['text']  # 数据库名字
 post_id = db['inventory'].insert_one(
     {'item': "canvas", 'qty': 100, 'tags': ["cotton"], 'size': {'h': 28, 'w': 35.5, 'uom': "cm"}}
 )
+
+db['inventory'].bulk_write()
 print(post_id)
 
 # ------------显示这个数据库下的所有几个名字-------------------#
