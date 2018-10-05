@@ -13,19 +13,19 @@ post_id = db['inventory'].insert_many(
 )
 
 # -------------嵌入数组------------------------#
-print(list(db['inventory'].find({'tags': ['blue']})))  # 完全匹配
-print(list(db['inventory'].find({'tags': ['red', 'blank']})))
+# print(list(db['inventory'].find({'tags': ['blue']})))  # 完全匹配
+# print(list(db['inventory'].find({'tags': ['red', 'blank']})))
 
 # ---只要拥有red和blank即可，不必在意顺序---------#
 # all用在array上，不能在嵌入文档
 print(list(db['inventory'].find({'tags': {'$all': ['red', 'blank']}})))
 
 # -----------tags字段至少包含一个blue-----------#
-print(list(db['inventory'].find({'tags': 'blue'})))
+# print(list(db['inventory'].find({'tags': 'blue'})))
 
 
 # -----------tags字段的大小 -----------------#
-print(list(db['inventory'].find({'tags': {'$size': 3}})))
+# print(list(db['inventory'].find({'tags': {'$size': 3}})))
 
 # -------------.
-print(list(db['inventory2'].find({'tags.0': 'blue'})))
+# print(list(db['inventory2'].find({'tags.0': 'blue'})))
