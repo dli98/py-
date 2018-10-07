@@ -3,7 +3,7 @@
 
 #Python网络数据采集
 - [第1章 初见网络爬虫](Chapter01/)
-- [第2章 复杂HTML解析]((Chapter02/))
+- [第2章 复杂HTML解析](Chapter02/)
 - [第3章 开始采集](Chapter03/)
 - [第4章 使用API](Chapter04/)
 - [第5章 存储数据](Chapter05/)
