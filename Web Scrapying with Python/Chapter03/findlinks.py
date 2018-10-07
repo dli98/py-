@@ -1,31 +1,30 @@
-from urllib.request import  urlopen
-from bs4 import  BeautifulSoup
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 
-import  re
-import  datetime
-import  random
+import re
+import datetime
+import random
 
 pages = set()
 random.seed(datetime.datetime.now())
 
-def getInternalLinks(data, includeUrl):
 
+def getInternalLinks(data, includeUrl):
     inLinks = []
 
-    for link in data.findAll("a", href=re.compile("^(/|.*" + includeUrl+")")):
+    for link in data.findAll("a", href=re.compile("^(/|.*" + includeUrl + ")")):
         if link.attrs['href'] is not None:
             if link.attrs['href'] not in inLinks:
                 inLinks.append(link.attrs['href'])
 
-    return  inLinks
+    return inLinks
 
 
 def getExLinks(data, excludeUrl):
-
     exLinks = []
 
-    for link in data.findAll("a", href=re.compile("^(http|www)((?!"+excludeUrl+").)*$")):
-        if link.attrs['href']  is not None:
+    for link in data.findAll("a", href=re.compile("^(http|www)((?!" + excludeUrl + ").)*$")):
+        if link.attrs['href'] is not None:
             if link.attrs['href'] not in exLinks:
                 exLinks.append(link.attrs['href'])
 
@@ -37,6 +36,7 @@ def splitAddress(address):
 
     return addressParts
 
+
 def getRandomExtLink(startPage):
     html = urlopen(startPage)
     data = BeautifulSoup(html, "html.parser")
@@ -44,9 +44,9 @@ def getRandomExtLink(startPage):
 
     if len(exLinks) == 0:
         inLinks = getInternalLinks(startPage)
-        return getRandomExtLink(inLinks[random.randint(0,len(inLinks)-1)])
+        return getRandomExtLink(inLinks[random.randint(0, len(inLinks) - 1)])
     else:
-        return exLinks[random.randint(0,len(exLinks)-1)]
+        return exLinks[random.randint(0, len(exLinks) - 1)]
 
 
 def followExtOnly(startSite):
@@ -56,3 +56,4 @@ def followExtOnly(startSite):
 
 
 followExtOnly("http://oreilly.com")
+
