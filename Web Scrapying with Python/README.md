@@ -20,3 +20,8 @@
 
 ##注意
 此书代码使用的是Python3
+
+##实践
+- [马尔可夫文字生成器](Chapter08/MarkovGenerator.py)
+- [深度优先遍历](Chapter08/6-degrees-demo.py)
+- [维基百科广度优先遍历](Chapter08/6-degrees-find.py)
