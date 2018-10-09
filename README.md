@@ -5,3 +5,10 @@
 	- 进度：100%
 	- 项目：爬虫系统
 
+- [流畅的python](https://github.com/wkd-lidashuang/py-/tree/master/Fluent%20Python)
+	- 进度：50%
+
+
+## 爬虫
+- [自己写的一些爬虫实例](https://github.com/wkd-lidashuang/py-/tree/master/spiders)
+	- 进度：50%
