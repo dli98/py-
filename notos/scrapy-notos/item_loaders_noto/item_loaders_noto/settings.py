@@ -64,9 +64,9 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'item_loaders_noto.pipelines.ItemLoadersNotoPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'item_loaders_noto.pipelines.ItemLoadersNotoPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +88,8 @@ DEFAULT_REQUEST_HEADERS = {
 # HTTPCACHE_DIR = 'httpcache'
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# LOG_SHORT_NAMES = False
+LOG_LEVEL = 'WARNING'
+LOG_FORMAT = '[%(name)s] %(asctime)s %(levelname)-8s: %(message)s]'
+LOG_FILE = 'ds.log'

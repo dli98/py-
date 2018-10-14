@@ -6,6 +6,7 @@
 from scrapy.loader import ItemLoader
 from scrapy.loader.processors import TakeFirst, MapCompose, Join
 import scrapy
+import logging
 
 
 def parse_length(text, loader_context):
@@ -21,6 +22,9 @@ def add_title_jobbole(value):
 
 
 def get_text(value):
+    print('-------------')
+    logger = logging.getLogger(__name__)
+    logger.warning('text')
     print('xxxxxxxxxxxx', value)
     return value
 
@@ -34,7 +38,7 @@ class TextLoader(ItemLoader):
 
 class ExtractItem(scrapy.Item):
     title = scrapy.Field(
-        input_processor=MapCompose(get_text),
+        input_processor=MapCompose(add_title_jobbole),
         # MapCompose()里的参数可以是任意函数，例子中add是外置函数，也可以是lambda匿名函数
     )
     url = scrapy.Field()

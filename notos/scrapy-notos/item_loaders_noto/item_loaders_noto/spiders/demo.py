@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from item_loaders_noto.items import TextLoader, ExtractItem
+import logging
+from scrapy.utils.log import configure_logging
+
+configure_logging(install_root_handler=False)
+logging.basicConfig(
+    filename='log.txt',
+    format='%(levelname)s: %(message)s',
+    level=logging.WARNING
+)
 
 
 class DemoSpider(scrapy.Spider):
@@ -8,7 +17,13 @@ class DemoSpider(scrapy.Spider):
     allowed_domains = ['www.jianshu.com/trending/weekly?']
     start_urls = ['https://www.jianshu.com/trending/weekly?&page=1']
 
+    def __init__(self, *args, **kwargs):
+        # logger = logging.getLogger('scrapy')
+        # logger.setLevel(logging.WARNING)
+        super().__init__(*args, **kwargs)
+
     def parse(self, response):
+        # print("Existing settings: %s" % self.settings.attributes.keys())
         # 这里的ArticalItemLoader是继承了itemloader,并重写了部分功能，实现定制
         item_loader = TextLoader(item=ExtractItem(), response=response)
         item_loader.add_value("front_image_url2", '123')
@@ -18,10 +33,13 @@ class DemoSpider(scrapy.Spider):
         item_loader.add_value("url", response.url)
         item_loader.add_value("front_image_url", ['123', '456'])
 
-        print(item_loader.get_input_processor('title'))
-        print(item_loader.get_output_value('title'))
+        # print(response.xpath('//*[@id="note-34872153"]//text()').extract())
+        self.logger.info(item_loader.get_input_processor('title'))
+        print('2t', item_loader.get_output_value('title'))
         print(item_loader.get_output_processor('title'))
         print(item_loader.get_collected_values('title'))
+
+
 
         # nested loaders
         # load stuff not in the footer
@@ -48,7 +66,6 @@ class DemoSpider(scrapy.Spider):
        # no need to call footer_loader.load_item()
        item_loader.load_item()
         '''
-        item_loader = TextLoader(item=ExtractItem(), response=response)
         # 装入Item
         artical_item = item_loader.load_item()
         yield artical_item
