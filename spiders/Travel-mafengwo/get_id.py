@@ -113,9 +113,8 @@ def parse_city_url(url, provice_id):
     for page in range(1, pages + 1):  # 解析页面发现是个post请求
         t = tpool.submit(func, page, provice_id)
         obj.append(t)
-    for t in as_completed(obj):
+    for i in as_completed(obj):
         info, nums = i.result()
-        print(info, nums)
         sum_nums += nums
         city_info.extend(info)
     provice_info['sum_num'] = sum_nums
