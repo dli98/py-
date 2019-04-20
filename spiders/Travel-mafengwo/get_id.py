@@ -86,11 +86,18 @@ def parse_city_info(response):
         info.append(city)
     return info, nums
 
+DEFAULT_REQUEST_HEADERS = {
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'en',
+   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+}
+
 
 def func(page, provice_id):
     print(f'解析第{page}页信息')
     data = {'mddid': provice_id, 'page': page}
-    response = requests.post('http://www.mafengwo.cn/mdd/base/list/pagedata_citylist', data=data)
+    response = requests.post('http://www.mafengwo.cn/mdd/base/list/pagedata_citylist', data=data
+                             ,headers=DEFAULT_REQUEST_HEADERS)
     info, nums = parse_city_info(response)  # 得到每个景点城市的具体名字, 链接, 多人少去过
     print(info, nums)
     return (info, nums)
@@ -108,7 +115,7 @@ def parse_city_url(url, provice_id):
     pages = int(soup.find(class_="pg-last _j_pageitem").attrs['data-page'])  # 这个省总共有多少页热门城市
     city_info = []
     sum_nums = 0  # 用来记录这个省的总流量
-    tpool = ThreadPoolExecutor(1)
+    tpool = ThreadPoolExecutor(20)
     obj = []
     for page in range(1, pages + 1):  # 解析页面发现是个post请求
         t = tpool.submit(func, page, provice_id)
@@ -140,11 +147,14 @@ def get_city_process(url, name, provice_id):
 def get_city_id():
     url = 'http://www.mafengwo.cn/mdd/'
     name, provice_id, urls = find_province_url(url)
+    print(name)
     # 创建5个进程，此方法会导致封ip。最好构造IP池
-    Ppool = ProcessPoolExecutor(5)
     for url, name, provice_id in zip(urls, name, provice_id):
-        Ppool.submit(get_city_process, url, name, provice_id)
-    Ppool.shutdown()
+        get_city_process(url, name, provice_id)
+    # Ppool = ProcessPoolExecutor(5)
+    # for url, name, provice_id in zip(urls, name, provice_id):
+    #     Ppool.submit(get_city_process, url, name, provice_id)
+    # Ppool.shutdown()
 
 
 if __name__ == '__main__':
