@@ -7,7 +7,12 @@ from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import as_completed
 
+
 def get_html_text(url):
+    """
+    :param url: 得到网页信息
+    :return:
+    """
     headers = {'User-Agent':
                    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'}
     r = requests.get(url, headers=headers)
@@ -36,10 +41,15 @@ def municipality_directly_info(soup):
     provice_info['citys'] = info
     provice_info['priovice_name'] = '直辖市'
     provice_info['provice_id'] = '0'
+    print(provice_info)
     save_to_mongo('mafengwo', provice_info)
 
 
 def find_province_url(url):
+    """
+    :param url: 热门目的地首页
+    :return: 所有热门省和直辖市名称，专有id，专有链接
+    """
     html = get_html_text(url)
     soup = BeautifulSoup(html, 'lxml')
     municipality_directly_info(soup)  # 处理直辖市信息
@@ -57,6 +67,7 @@ def find_province_url(url):
             # 得到这个省的热门城市链接
             data_cy_p = link.replace('travel-scenic-spot/mafengwo', 'mdd/citylist')
             urls.append(parse.urljoin(url, data_cy_p))
+    print(name, provice_id, urls)
     return name, provice_id, urls
 
 
@@ -77,26 +88,34 @@ def parse_city_info(response):
 
 
 def func(page, provice_id):
-    print(f'解析{page}页信息')
+    print(f'解析第{page}页信息')
     data = {'mddid': provice_id, 'page': page}
     response = requests.post('http://www.mafengwo.cn/mdd/base/list/pagedata_citylist', data=data)
     info, nums = parse_city_info(response)  # 得到每个景点城市的具体名字, 链接, 多人少去过
+    print(info, nums)
     return (info, nums)
 
 
-def parse_city_url(html, provice_id):
-    provice_info = {}
+def parse_city_url(url, provice_id):
+    """
+    :param url: 省url
+    :param provice_id: 省id
+    :return:
+    """
+    html = get_html_text(url)
+    provice_info = {}   # 存储这个省的信息
     soup = BeautifulSoup(html, 'lxml')
     pages = int(soup.find(class_="pg-last _j_pageitem").attrs['data-page'])  # 这个省总共有多少页热门城市
     city_info = []
     sum_nums = 0  # 用来记录这个省的总流量
-    tpool = ThreadPoolExecutor(20)
+    tpool = ThreadPoolExecutor(1)
     obj = []
     for page in range(1, pages + 1):  # 解析页面发现是个post请求
         t = tpool.submit(func, page, provice_id)
         obj.append(t)
     for t in as_completed(obj):
         info, nums = i.result()
+        print(info, nums)
         sum_nums += nums
         city_info.extend(info)
     provice_info['sum_num'] = sum_nums
@@ -105,22 +124,28 @@ def parse_city_url(html, provice_id):
 
 
 def get_city_process(url, name, provice_id):
+    """
+    :param url:  省url
+    :param name: 省名
+    :param provice_id: 省id
+    :return:
+    """
     print(f'正在解析{url}')
-    html = get_html_text(url)
-    provice_info = parse_city_url(html, provice_id)
+    provice_info = parse_city_url(url, provice_id)
     provice_info['provice_id'] = provice_id
     provice_info['provice_name'] = name
     print(f'存储{name}省的信息')
     save_to_mongo('mafengwo', provice_info)
 
+
 def get_city_id():
     url = 'http://www.mafengwo.cn/mdd/'
     name, provice_id, urls = find_province_url(url)
+    # 创建5个进程，此方法会导致封ip。最好构造IP池
     Ppool = ProcessPoolExecutor(5)
     for url, name, provice_id in zip(urls, name, provice_id):
         Ppool.submit(get_city_process, url, name, provice_id)
     Ppool.shutdown()
-
 
 
 if __name__ == '__main__':

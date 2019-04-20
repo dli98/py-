@@ -89,12 +89,6 @@ class city_detail_deal:
 
 
 
-
-class Schedule(object):
-    c = city_detail_deal()
-
-
-
 if __name__ == '__main__':
     c = city_detail_deal()
     c.get_detail_info()
