@@ -2,8 +2,8 @@
 
 
 ## 三种方法实现单例模式
-- [	元类](https://github.com/wkd-lidashuang/py-/blob/master/singleton/metaclass)
-- [	装饰器](https://github.com/wkd-lidashuang/py-/blob/master/singleton/decorator)
+- [	元类](/singleton/metaclass)
+- [	装饰器](/singleton/decorator)
 - [	__new__方法](https://github.com/wkd-lidashuang/py-/blob/master/singleton/__new__)
 
 ## 读书
