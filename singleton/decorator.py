@@ -4,8 +4,6 @@ def Singleton(cls):
     def _singleton(*args, **kargs):
         if cls not in _instance:
             _instance[cls] = cls(*args, **kargs)
-            print(args)
-        print(_instance)
         return _instance[cls]
     return _singleton
 
@@ -14,10 +12,10 @@ def Singleton(cls):
 class A(object):  # A = singleton(A)
     a = 1
 
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0):
         self.x = x
-        print(self.x)
 
 
-a1 = A(2, )
-a2 = A(3)
+obj1 = A(2)
+obj2 = A(3)
+print(obj1, obj2)

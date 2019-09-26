@@ -1,10 +1,8 @@
 #py爬虫
 
 
-## 三种方法实现单例模式
-- [	元类](/singleton/metaclass)
-- [	装饰器](/singleton/decorator)
-- [	__new__方法](/singleton/__new__)
+## 设计模式
+- [单例模式](/singleton)
 
 ## 读书
 - [Python网络数据采集](/Web%20Scrapying%20with%20Python)
